@@ -105,13 +105,16 @@ PostDown = ${WG_POST_DOWN}
     for (const [clientId, client] of Object.entries(config.clients)) {
       if (!client.enabled) continue;
 
+      if (!client.allowedIPs) client.allowedIPs = [];
+      const allowedIPs = client.allowedIPs.join(',');
+
       result += `
 
 # Client: ${client.name} (${clientId})
 [Peer]
 PublicKey = ${client.publicKey}
 PresharedKey = ${client.preSharedKey}
-AllowedIPs = ${client.address}/32`;
+AllowedIPs = ${client.address}/32` + (allowedIPs ? ',' : '') + allowedIPs;
     }
 
     debug('Config saving...');
